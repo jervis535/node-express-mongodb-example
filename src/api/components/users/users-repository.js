@@ -62,10 +62,20 @@ async function deleteUser(id) {
   return User.deleteOne({ _id: id });
 }
 
+/**
+ * @param {string} email - Email to check for duplicates
+ * @returns {Promise} - Returns true if email is duplicate, false otherwise
+ */
+async function checkemail(email) {
+  const checker=await User.findOne({email});
+  return checker;
+}
+
 module.exports = {
   getUsers,
   getUser,
   createUser,
   updateUser,
   deleteUser,
+  checkemail,
 };

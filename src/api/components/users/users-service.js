@@ -49,6 +49,9 @@ async function getUser(id) {
  * @returns {boolean}
  */
 async function createUser(name, email, password) {
+  if(await usersRepository.checkemail(email)!= null){
+    return false;
+  }
   // Hash password
   const hashedPassword = await hashPassword(password);
 
@@ -69,6 +72,9 @@ async function createUser(name, email, password) {
  * @returns {boolean}
  */
 async function updateUser(id, name, email) {
+  if(await usersRepository.checkemail(email)!= null){
+    return false;
+  }
   const user = await usersRepository.getUser(id);
 
   // User not found

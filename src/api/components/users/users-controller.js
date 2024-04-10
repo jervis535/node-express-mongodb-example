@@ -52,6 +52,9 @@ async function createUser(request, response, next) {
     const password = request.body.password;
 
     const success = await usersService.createUser(name, email, password);
+    if (success === false) {
+      throw errorResponder(errorTypes.EMAIL_ALREADY_TAKEN);
+    }
     if (!success) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
@@ -79,6 +82,9 @@ async function updateUser(request, response, next) {
     const email = request.body.email;
 
     const success = await usersService.updateUser(id, name, email);
+    if (success === false) {
+      throw errorResponder(errorTypes.EMAIL_ALREADY_TAKEN);
+    }
     if (!success) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
