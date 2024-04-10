@@ -128,10 +128,42 @@ async function deleteUser(request, response, next) {
   }
 }
 
+/**
+ * Handle update user request
+ * @param {object} request - Express request object
+ * @param {object} response - Express response object
+ * @param {object} next - Express route middlewares
+ * @returns {object} Response object or pass an error to the next route
+ */
+async function patchuser(request,response,next){
+  try {
+    const passwordlama=request.body.passwordlama;
+    const passwordbaru=request.body.passwordbaru;
+    const confirmpasswordbaru=request.body.confirmpasswordbaru;
+    const id=request.params.id
+    if (passwordbaru!==confirmpasswordbaru){
+      throw errorResponder(errorTypes.INVALID_PASSWORD);
+    }
+    const success=await usersService.patchuser(id,passwordlama,passwordbaru)
+    if (success===false){
+      throw errorResponder(errorTypes.UNPROCESSABLE_ENTITY, 'old password is wrong');
+    }
+    if (success===null){
+      throw errorResponder(errorTypes.UNPROCESSABLE_ENTITY, 'Unknown user');
+    }
+    return response.status(200).json({passwordbaru});
+  } catch (error) {
+    return next(error);
+  }
+}
+
+
+
 module.exports = {
   getUsers,
   getUser,
   createUser,
   updateUser,
   deleteUser,
+  patchuser,
 };

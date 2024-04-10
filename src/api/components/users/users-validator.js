@@ -16,4 +16,13 @@ module.exports = {
       email: joi.string().email().required().label('Email'),
     },
   },
+
+  patchuser: {
+    body:{
+      passwordlama:joi.string().min(6).max(32).required().label('passwordlama'),
+      passwordbaru:joi.string().min(6).max(32).required().label('passwordbaru'),
+      confirmpasswordbaru:joi.string().min(6).max(32).required().label('confirmpasswordbaru'),
+    }
+
+  },
 };

@@ -71,6 +71,24 @@ async function checkemail(email) {
   return checker;
 }
 
+/**
+ * @param {string} id
+ * @param {string} password
+ * @returns {Promise}
+ */
+async function patchuser(id,password){
+  return User.updateOne(
+    {
+      _id:id,
+    },
+    {
+      $set:{
+        password
+      },
+    }
+  );
+}
+
 module.exports = {
   getUsers,
   getUser,
@@ -78,4 +96,5 @@ module.exports = {
   updateUser,
   deleteUser,
   checkemail,
+  patchuser,
 };

@@ -1,5 +1,6 @@
 const usersRepository = require('./users-repository');
 const { hashPassword } = require('../../../utils/password');
+const {passwordMatched}=require('../../../utils/password');
 
 /**
  * Get list of users
@@ -113,10 +114,38 @@ async function deleteUser(id) {
   return true;
 }
 
+/**
+ * @param {string} id
+ * @param {string} passwordlama
+ * @param {string} passwordbaru
+ * @returns {Promise}
+ */
+async function patchuser(id,passwordlama,passwordbaru){
+  const user = await usersRepository.getUser(id);
+  if(!user){
+    return null;
+  }
+
+  const checker=await passwordMatched(passwordlama,user.password);
+  if (!checker){
+    return false;
+  }
+
+  try {
+    const hashed=await hashPassword(passwordbaru)
+    await usersRepository.patchuser(id,hashed);
+  } 
+  catch (err) {
+    throw new Error(err);
+  }
+  return true;
+}
+
 module.exports = {
   getUsers,
   getUser,
   createUser,
   updateUser,
   deleteUser,
+  patchuser,
 };
